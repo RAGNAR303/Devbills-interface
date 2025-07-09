@@ -1,36 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 @import "tailwindcss";
 
 @theme {
-    /* Cores do tema */
-    --color-primary-500: #37E359;
-    --color-primary-600: #2BC348;
-    --color-primary-700: #228a36;
-  
-    --color-gray-950: #0B1017;
-    /* background */
-    --color-gray-900: #0E141D;
-    /* card */
-    --color-gray-800: #141F2B;
-    /* lighter */
-    --color-gray-700: #1A2B3E;
-    /* border */
-    --color-gray-400: #94A3B8;
-    /* text-muted */
-    --color-gray-50: #FFFFFF;
-    /* text */
-  
-    --color-red-500: #FF5873;
-    /* danger */
-    --color-green-500: #37E359;
-    /* success */
-    --color-yellow-500: #F9CA24;
-    /* warning */
-  
-    /* Fontes */
-    --font-sans: Ubuntu, sans-serif;
+  /* Cores do tema */
+  --color-primary-500: #37e359;
+  --color-primary-600: #2bc348;
+  --color-primary-700: #228a36;
+
+  --color-gray-950: #0b1017;
+  /* background */
+  --color-gray-900: #0e141d;
+  /* card */
+  --color-gray-800: #141f2b;
+  /* lighter */
+  --color-gray-700: #1a2b3e;
+  /* border */
+  --color-gray-400: #94a3b8;
+  /* text-muted */
+  --color-gray-50: #ffffff;
+  /* text */
+
+  --color-red-500: #ff5873;
+  /* danger */
+  --color-green-500: #37e359;
+  /* success */
+  --color-yellow-500: #f9ca24;
+  /* warning */
+
+  /* Fontes */
+  /* --font-sans: Ubuntu, sans-serif; */
+  --font-sans: Barlow Condensed, sans-serif;
 }
 
-body{
-    @apply bg-gray-950 text-gray-50 min-h-screen font-sans
+body {
+  /* @apply bg-gray-950 min-h-screen font-sans; */
+
+  @apply bg-linear-130 from-gray-950 to-gray-800 min-h-screen font-sans;
 }
+
+.container-app {
+  @apply max-w-7xl mx-auto px-4 text-white;
+}
+
+@keyframes glow{
+   0%{
+    box-shadow: 0 0 5px rgb(55, 227, 89, 0.3)
+   }
+   100%{
+    box-shadow: 0 0 15px rgb(55, 227, 89, 0.7)
+   }
+}
+
+.glow{
+  animation: glow 2s ease-in-out infinite alternate ;
+}
+
+@keyframes glowNegative{
+   0%{
+    box-shadow: 0 0 5px rgba(227, 58, 55, 0.3)
+   }
+   100%{
+    box-shadow: 0 0 15px rgba(227, 55, 55, 0.7)
+   }
+}
+
+.glowNegative{
+  animation: glowNegative 2s ease-in-out infinite alternate ;
+}
+
