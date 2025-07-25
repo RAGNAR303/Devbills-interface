@@ -1,11 +1,11 @@
-// export enum TransactionType {
-//     EXPENSE = 'expense',
-//     INCOME = 'income'
-// }
+export enum TransactionType {
+    EXPENSE = 'expense',
+    INCOME = 'income'
+}
 
 import type { Category, CategorySummary } from "./category";
 
-export type TransactionType = "income" | "expense";
+// export type TransactionType = "income" | "expense";
 
 export interface Transaction {
   id: string;
@@ -32,4 +32,9 @@ export interface TransactionSummary {
   totalIncomes: number;
   balance: number;
   expensesByCategory: CategorySummary[];
+}
+export interface MonthlyItem {
+  name: string;
+  expenses: number;
+  income: number;
 }

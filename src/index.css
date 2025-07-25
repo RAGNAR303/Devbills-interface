@@ -36,36 +36,39 @@
 body {
   /* @apply bg-gray-950 min-h-screen font-sans; */
 
-  @apply bg-linear-130 from-gray-950 to-gray-800 min-h-screen font-sans;
+  @apply bg-linear-130 from-gray-950 to-gray-800 min-h-screen  text-white font-sans;
 }
 
 .container-app {
-  @apply max-w-7xl mx-auto px-4 text-white;
+  @apply max-w-6xl mx-auto px-4;
 }
 
-@keyframes glow{
-   0%{
-    box-shadow: 0 0 5px rgb(55, 227, 89, 0.3)
-   }
-   100%{
-    box-shadow: 0 0 15px rgb(55, 227, 89, 0.7)
-   }
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgb(55, 227, 89, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 15px rgb(55, 227, 89, 0.7);
+  }
 }
 
-.glow{
-  animation: glow 2s ease-in-out infinite alternate ;
+.glow {
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
-@keyframes glowNegative{
-   0%{
-    box-shadow: 0 0 5px rgba(227, 58, 55, 0.3)
-   }
-   100%{
-    box-shadow: 0 0 15px rgba(227, 55, 55, 0.7)
-   }
+@keyframes glowNegative {
+  0% {
+    box-shadow: 0 0 5px rgba(227, 58, 55, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(227, 55, 55, 0.7);
+  }
 }
 
-.glowNegative{
-  animation: glowNegative 2s ease-in-out infinite alternate ;
+.glowNegative {
+  animation: glowNegative 2s ease-in-out infinite alternate;
 }
 
+.headerBack {
+  background: liner-gradient(180deg, #0b1017, #141f2b);
+}

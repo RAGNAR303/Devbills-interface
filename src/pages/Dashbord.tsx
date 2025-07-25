@@ -1,10 +1,32 @@
 import { useEffect, useState } from "react";
 import MonthYearSelect from "../components/MonthYearSelect";
-import { getTransactionsSummary } from "../services/transactionService";
-import type { TransactionSummary } from "../types/transactions";
+import { getTransactionsMontly, getTransactionsSummary } from "../services/transactionService";
+import type { MonthlyItem, TransactionSummary } from "../types/transactions";
 import Card from "../components/Card";
-import { BanknoteArrowDown, BanknoteArrowUp, Wallet } from "lucide-react";
+import {
+  BanknoteArrowDown,
+  BanknoteArrowUp,
+  Calendar,
+  CalendarSearch,
+  ClockAlert,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
 import { formatCurrency } from "../utils/formatter";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  Rectangle,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const initialSummary: TransactionSummary = {
   totalExpenses: 0,
@@ -13,11 +35,17 @@ const initialSummary: TransactionSummary = {
   expensesByCategory: [],
 };
 
+interface ChartLabelProps {
+  categoryName: string;
+  percent: number;
+}
+
 const Dashboard = () => {
   const currentDate = new Date();
   const [year, setYear] = useState<number>(currentDate.getFullYear());
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
   const [summary, setSummary] = useState<TransactionSummary>(initialSummary);
+  const [monthlyItemData, setMonthlyItemData] = useState<MonthlyItem>([]);
 
   useEffect(() => {
     async function loadTransactionsSummary() {
@@ -29,6 +57,26 @@ const Dashboard = () => {
 
     loadTransactionsSummary();
   }, [month, year]);
+
+  useEffect(() => {
+    async function loadTransactionsMonthly() {
+      const response = await getTransactionsMontly(month, year , 4);
+
+      setMonthlyItemData(response.history);
+      console.log(response);
+    }
+
+    loadTransactionsMonthly();
+  }, [month, year]);
+
+  // variavel para rederizar o nome da categoria e a porcetagem no grafico de pizza
+  const renderPieChartLabel = ({ categoryName, percent }: ChartLabelProps): string => {
+    return ` ${categoryName}: ${(percent * 100).toFixed(1)}%`;
+  };
+
+  const formatTooTipValue = (value: number | string): string => {
+    return formatCurrency(typeof value === "number" ? value : 0);
+  };
 
   return (
     <div className="container-app py-6">
@@ -83,6 +131,106 @@ const Dashboard = () => {
             <p className="text-2xl font-semibold text-red-700">
               {formatCurrency(summary.totalExpenses)}
             </p>
+          </div>
+        </Card>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 mt-3">
+        <Card
+          icon={<TrendingUp size={20} className="text-primary-500" />}
+          title="Despesas por Categoria"
+          className="min-h-80"
+          hover
+        >
+          {summary.expensesByCategory.length > 0 ? (
+            <div className="h-72 mt-4">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={summary.expensesByCategory}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    innerRadius={50}
+                    paddingAngle={2}
+                    dataKey="amount"
+                    nameKey="categoryName"
+                    label={renderPieChartLabel}
+                  >
+                    {summary.expensesByCategory.map((entry) => (
+                      <Cell key={entry.categoryId} fill={entry.categoryColor} />
+                    ))}
+                  </Pie>
+                  <div className="bg-gray-700">
+                    <Tooltip formatter={formatTooTipValue} />
+                  </div>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div>
+              <p className="flex justify-center flex-col items-center text-3xl h-64 text-gray-500 gap-2">
+                <ClockAlert size={60} />
+                Nenhum despesa registrada nesse período
+              </p>
+            </div>
+          )}
+        </Card>
+        <Card
+          icon={<Calendar size={20} className="text-primary-500" />}
+          title="Histórico Mensal"
+          className="min-h-80"
+        >
+          <div className="h-72 mt-4">
+            {monthlyItemData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={monthlyItemData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                  tick={{ style: { textTransform: "capitalize" } }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(43, 255, 0, 0.482)" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#94a3b8"
+                    tick={{ style: { textTransform: "capitalize" } }}
+                  />
+                  <YAxis
+                    stroke="#94a3b8"
+                    tickFormatter={formatCurrency}
+                    tick={{ style: { textTransform: "capitalize" } }}
+                  />
+                  <Tooltip
+                    formatter={formatCurrency}
+                    contentStyle={{ backgroundColor: " #1a1a1a", borderColor: "#2a2a2a" , textTransform: "capitalize" }}
+                    labelStyle={{ color: " #ffffff" }}
+                    
+                  />
+                  <Legend style={{textTransform: "capitalize"}} />
+                  <Bar
+                    dataKey="expenses"
+                    fill="#b70040"
+                    activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  />
+                  <Bar
+                    dataKey="income"
+                    fill="#0ac200"
+                    activeBar={<Rectangle fill="gold" stroke="purple" />}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div>
+                <p className="flex justify-center flex-col items-center text-3xl h-64 text-gray-500 gap-2">
+                  <CalendarSearch size={60} />
+                  Nenhum despesa registrada nesse período
+                </p>
+              </div>
+            )}
           </div>
         </Card>
       </div>
