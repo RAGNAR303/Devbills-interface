@@ -36,27 +36,28 @@ const TransactionsForms = () => {
     fetchCategories();
   }, []);
 
+  // Filtra o "type" de categoria que foi selecionada no botão, e trás a categorias relacinadas a ela
   const filteredCategories = categories.filter((category) => category.type === formaData.type);
   const handleSubmit = () => {};
 
-  // Transforma a chave name em valor
+  // Transforma a chave "name" em "value" para
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  // Coloca o "type" de transação, se ela e "ENCOME" ou "EXPENSE" para fazer ativaçao e trazer as cadegorias relaciondas
   const handleTransactionType = (itemType: TransactionType): void => {
     setFormData((prev) => ({ ...prev, type: itemType }));
   };
 
   return (
-    <div>
-      <div>
-        <h1>Nova Transação</h1>
+    <div className="container-app py-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl text-center mb-4 font-bold">Nova Transação</h1>
         <Card>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor={formID}>Tipo de Despesas </label>
+              <label htmlFor={formID}> </label>
               <TransactionTypeSelect
                 // Botão de escolher o tipo de transação
                 id={formID}
@@ -90,7 +91,6 @@ const TransactionsForms = () => {
               label="Data"
               name="date"
               type="date"
-              className="text-white"
               value={formaData.date}
               onChange={handleChange}
               placeholder="dd/mm/aaaa"

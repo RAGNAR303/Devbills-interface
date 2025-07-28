@@ -3,6 +3,7 @@ import GoogleLoginButton from "../components/GoogleLoginButton";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { Activity } from "lucide-react";
+import { toast } from "react-toastify";
 // import FacebookloginButton from "../components/FacebookloginButton";
 
 const Login = () => {
@@ -10,21 +11,17 @@ const Login = () => {
 
   const { signWithGoogle, authState } = useAuth();
 
+  console.log({ authState });
+
   const handleLogin = async () => {
     try {
       await signWithGoogle();
+      toast.success("Login realizado com sucesso");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+      toast.error("Erro ao fazer login , verifique os dados e tente novamente");
     }
   };
-
-  // const handleFacebookLogin = async () => {
-  //   try {
-  //     await signWithGoogle();
-  //   } catch (error) {
-  //     console.error("Erro ao fazer login:", error);
-  //   }
-  // };
 
   useEffect(() => {
     if (authState.user && !authState.loading) {

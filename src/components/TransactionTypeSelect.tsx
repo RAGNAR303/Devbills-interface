@@ -24,14 +24,14 @@ const TransactionTypeSelect = ({ onChange, value, id }: TransactionTypeSelectPro
 
   return (
     <fieldset id={id} className="grid grid-cols-2 gap-1.5">
-      <legend>Tipo de Transação</legend>
+      <legend className="text-2xl mb-4">Tipo de Transação</legend>
 
       {TransactionTypeButtons.map((item) => (
         <button
           key={item.type}
           type="button"
           onClick={() => onChange(item.type)}
-          className={`flex items-center justify-center border-2 rounded-md py-2 px-4 transition-all cursor-pointer
+          className={`flex items-center justify-center border-2 rounded-md py-2 px-4 transition-all cursor-pointer mb-2
           ${value === item.type ? item.activeClasses : item.inativeClasses}
           `}
         >
