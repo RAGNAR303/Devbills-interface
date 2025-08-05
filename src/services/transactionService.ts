@@ -1,4 +1,5 @@
 import type {
+  CreateTransactionDTO,
   MonthlyItem,
   Transaction,
   TransactionFilter,
@@ -13,9 +14,9 @@ export const getTransactions = async (
     params: filter,
   });
 
-  const zzz = response.data;
-  console.log(zzz);
-  return zzz;
+  const responseData = response.data;
+
+  return responseData;
 };
 
 export const getTransactionsSummary = async (
@@ -35,16 +36,25 @@ export const getTransactionsMontly = async (
 ): Promise<{ history: MonthlyItem[] }> => {
   const response = await api.get<{ history: MonthlyItem[] }>("/transactions/historical", {
     params: {
-       month,
-       year,
-        months
-       },
+      month,
+      year,
+      months,
+    },
   });
 
   return response.data;
 };
 
-
+// Deletando Transaction na API
 export const deleteTransactions = async (id: string): Promise<void> => {
-  await api.delete(`/transactions/${id}`)
-}
+  await api.delete(`/transactions/${id}`);
+};
+
+// Mandado a Transaction criada para API
+export const createTransaction = async (
+  transactionData: CreateTransactionDTO,
+): Promise<Transaction> => {
+  const response = await api.post<Transaction>("/transactions", transactionData);
+
+  return response.data;
+};

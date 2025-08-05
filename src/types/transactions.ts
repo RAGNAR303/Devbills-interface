@@ -1,9 +1,10 @@
-export enum TransactionType {
-    EXPENSE = 'expense',
-    INCOME = 'income'
-}
-
+import type { Date } from "firebase/ai";
 import type { Category, CategorySummary } from "./category";
+
+export enum TransactionType {
+  EXPENSE = "expense",
+  INCOME = "income",
+}
 
 // export type TransactionType = "income" | "expense";
 
@@ -18,6 +19,14 @@ export interface Transaction {
   type: TransactionType;
   createdAt: string | Date;
   updatedAt: string | Date;
+}
+// DATA TRANSFER OBJECT -> OBJETO DE TRANSFERÊNCIA DE DADOS
+export interface CreateTransactionDTO {
+  description: string;
+  amount: number;
+  date: Date | string;
+  categoryId: string;
+  type: TransactionType;
 }
 
 export interface TransactionFilter {

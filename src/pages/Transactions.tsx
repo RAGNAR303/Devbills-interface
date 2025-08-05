@@ -1,11 +1,26 @@
-import { AlertCircle, ArrowDown, ArrowUp, Plus, Search, Trash } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Calendar,
+  DollarSign,
+  Plus,
+  Search,
+  SquarePen,
+  TagIcon,
+  Trash,
+} from "lucide-react";
 import { Link } from "react-router";
 import MonthYearSelect from "../components/MonthYearSelect";
 import { useEffect, useState, type ChangeEvent } from "react";
 import Input from "../components/Input";
 import Card from "../components/Card";
 import { TransactionType, type Transaction } from "../types/transactions";
-import { deleteTransactions, getTransactions } from "../services/transactionService";
+import {
+  deleteTransactions,
+  getTransactions,
+} from "../services/transactionService";
 import Button from "../components/Button";
 import { formatCurrency, formatDate } from "../utils/formatter";
 import { toast } from "react-toastify";
@@ -19,12 +34,12 @@ const Transactions = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transaction[]
+  >([]);
 
   const [deleteiD, setDeleteiD] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
-
-  console.log({ transactions });
 
   const fetchTransactions = async (): Promise<void> => {
     try {
@@ -33,19 +48,24 @@ const Transactions = () => {
       const data = await getTransactions({ month, year }); // Trazendo as transaçoes da API
       setTransactions(data); // colocando os dados na variavel "transactions" para renderizar na tela
       setFilteredTransactions(data); // coloca transação filtradas pela pesquisa
-      console.log(data);
     } catch {
       setError("Não foi possível carregar as transações , tente novamente"); // /colocando mensagem de erro no "error"
     } finally {
       setLoading(false); // Deliga o loading
     }
   };
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    fetchTransactions();
+  }, [month, year]);
 
   const handleDelete = async (id: string): Promise<void> => {
     try {
       setDeleteiD(id); // chamada o id que foi selecinado do array
       await deleteTransactions(id); // manda o id para transantionService para ir na API para exclusão
-      setTransactions((transactions) => transactions.filter((t) => t.id !== id)); // cria um novo array com o mesmo itens, porém o que foi excluido(id) nao entra
+      setFilteredTransactions((transactions) =>
+        transactions.filter((t) => t.id !== id)
+      ); // cria um novo array com o mesmo itens, porém o que foi excluido(id) nao entra
       toast.success("Transação excluído com sucesso"); // Mensagem de Sucesso => usanso toastify
     } catch (err) {
       console.error(err);
@@ -62,32 +82,48 @@ const Transactions = () => {
     }
   };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    fetchTransactions();
-  }, [month, year]);
-
+  // Faz a pesquisa na tabela
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSearchText(event.target.value);
+    const targetValue = event.target.value.trim().toLowerCase();
+    setSearchText(targetValue);
+
+    // Se o campo estiver vazio, retorna todas as transações
+    if (!targetValue) {
+      setFilteredTransactions(transactions);
+      return;
+    }
+
     setFilteredTransactions(
       transactions.filter((transaction) => {
+        // Valor que será recebido no Input de pesquisa
         const targetValue = event.target.value.toLowerCase();
-        const description = transaction.description.toLowerCase().includes(targetValue);
-        const categoryName = transaction.category.name.toLowerCase().includes(targetValue);
 
+        // Pega a descrição da Transação
+        const description = transaction.description
+          .toLowerCase()
+          .includes(targetValue);
+
+        // Pega a categoria da Transação
+        const categoryName = transaction.category.name
+          .toLowerCase()
+          .includes(targetValue);
+        // Pega a valor da Transação
         const amount = transaction.amount.toString().includes(targetValue);
 
-        const data = transaction.date.toString().includes(targetValue);
+        // Formatar a data
 
-        return amount || categoryName || description || data;
-      }),
+        return description || categoryName || amount;
+      })
     );
   };
 
   return (
     <div className="container-app py-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold mb-4 md:mb-0">Transações</h1>
+        <div className="flex justify-center items-center bg-[#0e1615]  rounded-xl border border-gray-700 p-2 px-4 mb-2 text-primary-500">
+          <ArrowUpDown className="w-9 h-9 mr-2" />
+          <h1 className="text-4xl font-bold  md:mb-0">Transações</h1>
+        </div>
         <Link
           to={"/transacoes/nova"}
           className="bg-primary-500 text-[#051626] font-semibold px-4 py-2.5 rounded-xl 
@@ -142,42 +178,49 @@ const Transactions = () => {
           <div className="overflow-x-auto">
             <table className="divide-y divide-gray-700 min-h-full w-full items-center">
               <thead>
-                <tr className="text-center">
+                <tr className="text-center ">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase"
+                    className="px-6 py-3 text-left text-xs font-semibold  text-white uppercase"
                   >
-                    Descrição
+                    <div className="flex items-center">
+                      <SquarePen className="h-3 w-3 mr-0.5" />
+                      Descrição
+                    </div>
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase"
+                    className="px-6 py-3 text-left text-xs font-semibold  text-white uppercase"
                   >
-                    Data
+                    <div className="flex items-center">
+                      <Calendar className="h-3 w-3 mr-0.5" />
+                      Data
+                    </div>
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase"
+                    className="px-6 py-3 text-left text-xs font-semibold  text-white uppercase"
                   >
-                    Categoria
+                    <div className="flex items-center">
+                      <TagIcon className="h-3 w-3 mr-0.5" />
+                      Categoria
+                    </div>
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase"
+                    className="px-6 py-3 text-left text-xs font-semibold  text-white uppercase"
                   >
-                    Value
+                    <div className="flex items-center">
+                      <DollarSign className="h-3 w-3 mr-0.5" />
+                      Valor
+                    </div>
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase"
-                  >
-                    {""}
-                  </th>
+                  <th scope="col">{""}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700  text-gray-400">
                 {filteredTransactions.map((transactions) => (
-                  <tr key={transactions.id} className="hover:bg-gray-800">
+                  <tr key={transactions.id} className="hover:bg-[#000000]">
                     <td className="px-6 py-4 text-sm whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="mr-2">
@@ -193,7 +236,7 @@ const Transactions = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm  whitespace-nowrap">
-                      {formatDate(transactions.date)}
+                      {formatDate(transactions.date as string | Date)}
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap">
                       <div className="flex items-center gap-0.5">
@@ -206,7 +249,11 @@ const Transactions = () => {
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap">
                       <span
-                        className={`${transactions.type === TransactionType.INCOME ? "text-primary-500" : "text-red-500"}`}
+                        className={`${
+                          transactions.type === TransactionType.INCOME
+                            ? "text-primary-500"
+                            : "text-red-500"
+                        }`}
                       >
                         {formatCurrency(transactions.amount)}
                       </span>

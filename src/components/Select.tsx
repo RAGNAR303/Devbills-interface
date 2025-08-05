@@ -44,9 +44,13 @@ const Select = ({
         <select
           id={selectId}
           {...rest}
-          className={`block w-full bg-gray-800 rounded-xl border pl-10 px-4 py-3 transition-all focus:outline-none focus:ring-2 text-gray-500
+          className={`block w-full bg-[#000000] rounded-xl border pl-10 px-4 py-3 transition-all focus:outline-none focus:ring-2 text-gray-500
              ${error ? "border-red-500" : "border-gray-700"} 
-             ${error ? "focus:border-red-500 focus:ring-red-500/2" : "focus:border-primary-500 focus:ring-red-500/2"}
+             ${
+               error
+                 ? "focus:border-red-500 focus:ring-red-500/2"
+                 : "focus:border-primary-500 focus:ring-red-500/2"
+             }
              appearance-none
              
              `}

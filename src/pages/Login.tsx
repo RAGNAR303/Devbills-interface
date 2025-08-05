@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { Activity } from "lucide-react";
 import { toast } from "react-toastify";
+
 // import FacebookloginButton from "../components/FacebookloginButton";
 
 const Login = () => {
@@ -11,7 +12,7 @@ const Login = () => {
 
   const { signWithGoogle, authState } = useAuth();
 
-  console.log({ authState });
+ 
 
   const handleLogin = async () => {
     try {
@@ -36,17 +37,26 @@ const Login = () => {
           <Activity strokeWidth={3} className="w-14 h-14 text-primary-500 " />
           DevBills
         </h1>
-        <p className="text-white mt-1">Gerencie suas finançãs de forma simples e eficiente</p>
+        <p className="text-gray-300 mt-1 md:text-3xl ">
+          Gerencie suas finançãs de forma simples e eficiente
+        </p>
       </header>
-      <div className=" bg-gray-900 text-center py-20 border border-gray-700 rounded-2xl max-w-4xl w-full ">
+      <div className=" bg-gray-900 text-center py-20 px-4 border border-gray-700 rounded-2xl max-w-4xl w-full ">
         <main className="flex flex-col justify-center items-center">
-          <section className="mb-10">
-            <h2 className="text-white font-bold text-3xl">Faça Login para continuar</h2>
-            <p className="text-gray-300">Acesse sua conta para começar a gerenciar suas finançãs</p>
+          <section className="mb-3">
+            <h2 className="text-white font-bold text-3xl md:text-4xl m-5 ">
+              Faça Login para continuar
+            </h2>
+            <p className="text-gray-300">
+              Acesse sua conta para começar a gerenciar suas finançãs
+            </p>
           </section>
           <div className=" justify-center items-center flex flex-col sm:flex-row  gap-4 w-full  mx-auto">
             <GoogleLoginButton isloading={false} onClick={handleLogin} />
-            {/* <FacebookloginButton isloading={false} onClick={handleFacebookLogin} /> */}
+            {/* <FacebookloginButton
+              isloading={false}
+              onClick={handleFacebookLogin}
+            /> */}
             {/* <MicrosoftloginButton isloading={false} onClick={handleLogin} /> */}
           </div>
           {authState.error && (
@@ -56,7 +66,8 @@ const Login = () => {
           )}
           <footer className="justify-center items-center mt-10">
             <p className="text-gray-400">
-              Ao fazer login, você concorda com nossos termos de uso e política de privacidade
+              Ao fazer login, você concorda com nossos termos de uso e política
+              de privacidade
             </p>
           </footer>
         </main>

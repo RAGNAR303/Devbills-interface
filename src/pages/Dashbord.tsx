@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import MonthYearSelect from "../components/MonthYearSelect";
-import { getTransactionsMontly, getTransactionsSummary } from "../services/transactionService";
+import {
+  getTransactionsMontly,
+  getTransactionsSummary,
+} from "../services/transactionService";
 import type { MonthlyItem, TransactionSummary } from "../types/transactions";
 import Card from "../components/Card";
 import {
@@ -8,6 +11,7 @@ import {
   BanknoteArrowUp,
   Calendar,
   CalendarSearch,
+  ChartNoAxesCombined,
   ClockAlert,
   TrendingUp,
   Wallet,
@@ -52,7 +56,6 @@ const Dashboard = () => {
       const response = await getTransactionsSummary(month, year);
 
       setSummary(response);
-      console.log(response);
     }
 
     loadTransactionsSummary();
@@ -60,17 +63,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     async function loadTransactionsMonthly() {
-      const response = await getTransactionsMontly(month, year , 4);
+      const response = await getTransactionsMontly(month, year, 5);
 
       setMonthlyItemData(response.history);
-      console.log(response);
     }
 
     loadTransactionsMonthly();
   }, [month, year]);
 
   // variavel para rederizar o nome da categoria e a porcetagem no grafico de pizza
-  const renderPieChartLabel = ({ categoryName, percent }: ChartLabelProps): string => {
+  const renderPieChartLabel = ({
+    categoryName,
+    percent,
+  }: ChartLabelProps): string => {
     return ` ${categoryName}: ${(percent * 100).toFixed(1)}%`;
   };
 
@@ -81,7 +86,11 @@ const Dashboard = () => {
   return (
     <div className="container-app py-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold mb-4 md:mb-0">Dashbord</h1>
+        <div className="flex justify-center items-center bg-[#0e1615] rounded-xl border border-gray-700 p-2 px-4 text-primary-500 mb-2">
+          <ChartNoAxesCombined className="w-9 h-9 mr-2" />
+          <h1 className="text-4xl font-bold  md:mb-0">Dashbord</h1>
+        </div>
+
         <MonthYearSelect
           month={month}
           year={year}
@@ -99,7 +108,9 @@ const Dashboard = () => {
         >
           <div>
             <p
-              className={`text-2xl font-semibold mt-2 ${summary.balance > 0 ? "text-primary-500" : "text-red-400"}`}
+              className={`text-2xl font-semibold mt-2 ${
+                summary.balance > 0 ? "text-primary-500" : "text-red-400"
+              }`}
             >
               {formatCurrency(summary.balance)}
             </p>
@@ -107,7 +118,6 @@ const Dashboard = () => {
         </Card>
 
         <Card
-          glowEffect
           hover
           title="Receitas"
           subtitle="Valor no Mês"
@@ -121,7 +131,6 @@ const Dashboard = () => {
         </Card>
 
         <Card
-          glowEffect
           hover
           title="Despesas"
           subtitle="Valor no Mês"
@@ -160,8 +169,18 @@ const Dashboard = () => {
                       <Cell key={entry.categoryId} fill={entry.categoryColor} />
                     ))}
                   </Pie>
-                  <div className="bg-gray-700">
-                    <Tooltip formatter={formatTooTipValue} />
+                  <div>
+                    <Tooltip
+                      formatter={formatTooTipValue}
+                      contentStyle={{
+                        backgroundColor: " #94a3b8c8",
+
+                        borderColor: "#1a2b3e ",
+                        textTransform: "capitalize",
+                        borderRadius: "5px",
+                        color: "#ffffff !important",
+                      }}
+                    />
                   </div>
                 </PieChart>
               </ResponsiveContainer>
@@ -179,6 +198,7 @@ const Dashboard = () => {
           icon={<Calendar size={20} className="text-primary-500" />}
           title="Histórico Mensal"
           className="min-h-80"
+          hover
         >
           <div className="h-72 mt-4">
             {monthlyItemData.length > 0 ? (
@@ -193,7 +213,10 @@ const Dashboard = () => {
                   }}
                   tick={{ style: { textTransform: "capitalize" } }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(43, 255, 0, 0.482)" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(43, 255, 0, 0.482)"
+                  />
                   <XAxis
                     dataKey="name"
                     stroke="#94a3b8"
@@ -206,18 +229,24 @@ const Dashboard = () => {
                   />
                   <Tooltip
                     formatter={formatCurrency}
-                    contentStyle={{ backgroundColor: " #1a1a1a", borderColor: "#2a2a2a" , textTransform: "capitalize" }}
+                    contentStyle={{
+                      backgroundColor: " #94a3b8c8",
+                      borderColor: "#1a2b3e ",
+                      textTransform: "capitalize",
+                      borderRadius: "5px",
+                    }}
                     labelStyle={{ color: " #ffffff" }}
-                    
                   />
-                  <Legend style={{textTransform: "capitalize"}} />
+                  <Legend style={{ textTransform: "capitalize" }} />
                   <Bar
                     dataKey="expenses"
+                    name={"DESPESA"}
                     fill="#b70040"
                     activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
                   <Bar
                     dataKey="income"
+                    name={"RECEITA"}
                     fill="#0ac200"
                     activeBar={<Rectangle fill="gold" stroke="purple" />}
                   />

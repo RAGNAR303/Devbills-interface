@@ -8,7 +8,15 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id?: string;
 }
 
-const Input = ({ icon, fullWidth, error, label, id, className, ...rest }: InputProps) => {
+const Input = ({
+  icon,
+  fullWidth,
+  error,
+  label,
+  id,
+  className,
+  ...rest
+}: InputProps) => {
   // Gerar automaticamente um id para input ,
   // para que o componente seja usando em outros lugares da aplicaçao, mas que as informações enviadas seja para cada uso
   const gereratedId = useId();
@@ -17,7 +25,10 @@ const Input = ({ icon, fullWidth, error, label, id, className, ...rest }: InputP
   return (
     <div className={`${fullWidth ? "w-full " : ""} mb-4`}>
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-gray-50 mb-1">
+        <label
+          htmlFor={inputId}
+          className="block text-sm font-medium text-gray-50 mb-1"
+        >
           {label}
         </label>
       )}
@@ -30,9 +41,15 @@ const Input = ({ icon, fullWidth, error, label, id, className, ...rest }: InputP
       </div>
       <input
         id={inputId}
-        className={`block w-full rounded-xl border ${error ? "border-red-500" : "border-gray-700"}
-      bg-gray-800 px-4 py-3 text-sm text-gray-500 transition-all focus:outline-none focus:ring-2
-      ${error ? "focus:border-red-500 focus:ring-red-500/2" : "focus:border-primary-500 focus:ring-red-500/2"}
+        className={`block w-full rounded-xl border ${
+          error ? "border-red-500" : "border-gray-700"
+        }
+      bg-[#000000] px-4 py-3 text-sm text-gray-500 transition-all focus:outline-none focus:ring-2
+      ${
+        error
+          ? "focus:border-red-500 focus:ring-red-500/2"
+          : "focus:border-primary-500 focus:ring-red-500/2"
+      }
       ${icon ? "pl-10" : ""}
       ${className}
        `}
