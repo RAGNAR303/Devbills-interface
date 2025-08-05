@@ -12,8 +12,6 @@ const Login = () => {
 
   const { signWithGoogle, authState } = useAuth();
 
- 
-
   const handleLogin = async () => {
     try {
       await signWithGoogle();
@@ -41,7 +39,7 @@ const Login = () => {
           Gerencie suas finançãs de forma simples e eficiente
         </p>
       </header>
-      <div className=" bg-gray-900 text-center py-20 px-4 border border-gray-700 rounded-2xl max-w-4xl w-full ">
+      <div className=" bg-[#000000] text-center py-20 px-4 border border-gray-700 rounded-2xl max-w-4xl w-full ">
         <main className="flex flex-col justify-center items-center">
           <section className="mb-3">
             <h2 className="text-white font-bold text-3xl md:text-4xl m-5 ">
